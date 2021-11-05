@@ -1,4 +1,4 @@
-// Jogo de Forca
+// Jogo de Foge Foge
 
 // Includes
 #include <stdio.h>
@@ -7,25 +7,26 @@
 // Defines de usuário
 
 // Variáveis globais
-static mapa_t mapa;
+static jogo_t jogo;
+
 
 // Protótipo de funções
 
 
 int main(void)
 {
-    ler_mapa(&mapa);
+    inicia_jogo(&jogo);
 
     while(!acabou_jogo())
     {
-        imprime_mapa(&mapa);
-
+        imprime_mapa(jogo.mapa);
+        
         char comando;
         scanf(" %c", &comando);
 
-        move_jogador(&mapa, comando);
+        move_personagem(jogo.mapa, jogo.personagem, comando);
     }
 
-    libera_mapa(&mapa);
+    libera_mapa_matriz(jogo.mapa);
     return 0;
 }

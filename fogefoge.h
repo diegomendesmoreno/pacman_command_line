@@ -1,21 +1,24 @@
 #ifndef FOGEFOGE_H
 #define FOGEFOGE_H
 
-struct mapa_s
+#include "mapa.h"
+#include "personagem.h"
+
+#define NUMERO_MAX_FANTASMA 3
+
+struct jogo_s
 {
-    char ** matriz;
-    int linhas;
-    int colunas;
+    mapa_t * mapa;
+    personagem_t * personagem;
+    // personagem_t * personagem[1 + NUMERO_MAX_FANTASMA];
+    int numero_fantasmas;
 };
 
-typedef struct mapa_s mapa_t;
+typedef struct jogo_s jogo_t;
 
 // Protótipo de funções
-void ler_mapa(mapa_t * mapa);
-void aloca_mapa(mapa_t * mapa);
-void imprime_mapa(mapa_t * mapa);
-void move_jogador(mapa_t * mapa, char comando);
-void libera_mapa(mapa_t * mapa);
+void inicia_jogo(jogo_t * jogo);
+// void move_personagem(jogo_t * jogo, char comando);
 int  acabou_jogo(void);
 
 #endif  // FOGEFOGE_H
