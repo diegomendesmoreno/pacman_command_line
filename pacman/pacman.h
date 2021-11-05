@@ -1,5 +1,5 @@
-#ifndef FOGEFOGE_H
-#define FOGEFOGE_H
+#ifndef PACMAN_H
+#define PACMAN_H
 
 #include "mapa.h"
 #include "personagem.h"
@@ -9,8 +9,7 @@
 struct jogo_s
 {
     mapa_t * mapa;
-    personagem_t * personagem;
-    // personagem_t * personagem[1 + NUMERO_MAX_FANTASMA];
+    personagem_t * personagem[1 + NUMERO_MAX_FANTASMA];
     int numero_fantasmas;
 };
 
@@ -18,7 +17,7 @@ typedef struct jogo_s jogo_t;
 
 // Protótipo de funções
 void inicia_jogo(jogo_t * jogo);
-// void move_personagem(jogo_t * jogo, char comando);
+void carrega_tela(jogo_t * jogo);
 int  acabou_jogo(void);
 
-#endif  // FOGEFOGE_H
+#endif  // PACMAN_H

@@ -1,4 +1,17 @@
+#include <stdlib.h>
 #include "personagem.h"
+
+void carrega_personagens(mapa_t * mapa, personagem_t ** personagem)
+{
+    // Inicialização do Herói
+    personagem[0] = (personagem_t*)malloc(sizeof(personagem_t));
+    encontra_personagem(mapa, personagem[0], HEROI);
+
+    // Inicialização dos Fantasmas
+    // jogo->numero_fantasmas = encontra_personagem(jogo->mapa, jogo->personagem, FANTASMA);
+    
+    // printf("%c [%d][%d]\n", jogo->personagem[0]->tipo, jogo->personagem[0]->x, jogo->personagem[0]->y);
+}
 
 // Encontra o personagem no mapa
 void encontra_personagem(mapa_t * mapa, personagem_t * personagem, char tipo_personagem)
@@ -12,7 +25,15 @@ void encontra_personagem(mapa_t * mapa, personagem_t * personagem, char tipo_per
                 personagem->tipo = tipo_personagem;
                 personagem->x = i;
                 personagem->y = j;
-                break;
+
+                if(tipo_personagem == HEROI)
+                {
+                    break;
+                }
+                else
+                {
+                    
+                }
             }
         }
     }

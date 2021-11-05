@@ -2,7 +2,7 @@
 
 // Includes
 #include <stdio.h>
-#include "fogefoge.h"
+#include "pacman/pacman.h"
 
 // Defines de usuário
 
@@ -19,12 +19,12 @@ int main(void)
 
     while(!acabou_jogo())
     {
-        imprime_mapa(jogo.mapa);
+        carrega_tela(&jogo);
         
         char comando;
         scanf(" %c", &comando);
 
-        move_personagem(jogo.mapa, jogo.personagem, comando);
+        move_personagem(jogo.mapa, jogo.personagem[0], comando);
     }
 
     libera_mapa_matriz(jogo.mapa);

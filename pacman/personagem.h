@@ -13,6 +13,7 @@ struct personagem_s
 typedef struct personagem_s personagem_t;
 
 // Protótipo de funções
+void carrega_personagens(mapa_t * mapa, personagem_t ** personagem);
 void encontra_personagem(mapa_t * mapa, personagem_t * personagem, char tipo_personagem);
 void move_personagem(mapa_t * mapa, personagem_t * personagem, char comando);
 

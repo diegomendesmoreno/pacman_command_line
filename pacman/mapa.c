@@ -9,12 +9,12 @@ void carrega_mapa(mapa_t * mapa)
     char linha[201];
     char caracter;
 
-    file = fopen("mapa.txt", "r");
+    file = fopen("pacman/mapas/mapa1.txt", "r");
 
     // Caso não consiga abrir o arquivo
     if(file == 0)
     {
-        printf("Desculpe, arquivo de mapa não disponível\n\n");
+        printf("Arquivo de mapa não disponível\n\n");
         exit(1);
     }
 
@@ -43,7 +43,7 @@ void carrega_mapa(mapa_t * mapa)
         exit(1);
     }
 
-    // Alocação de memória dinâmica da matriz do mapa
+    // Alocação da matriz do mapa
     aloca_mapa_matriz(mapa);
 
     // Escaniando todas as linhas do arquivo
@@ -58,9 +58,6 @@ void carrega_mapa(mapa_t * mapa)
 
 void imprime_mapa(mapa_t * mapa)
 {
-    // Limpa o console
-    printf("\e[1;1H\e[2J"); // Linux only
-    
     // Imprime o mapa
     for(int i = 0;i < mapa->linhas;i++)
     {
