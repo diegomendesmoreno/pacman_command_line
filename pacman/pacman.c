@@ -2,6 +2,8 @@
 #include <stdlib.h>
 #include "pacman.h"
 
+// #define DEBUG
+
 const char * ascii_pacman_logo = "\n\
  _ __   __ _  ___ _ __ ___   __ _ _ __  \n\
 | '_ \\ / _` |/ __| '_ ` _ \\ / _` | '_ \\ \n\
@@ -26,16 +28,18 @@ void inicia_jogo(jogo_t * jogo)
     carrega_mapa(jogo->mapa);
 
     // Inicialização de personagens
-    carrega_personagens(jogo->mapa, jogo->personagem);
+    jogo->numero_fantasmas = carrega_personagens(jogo->mapa, jogo->personagem);
 }
 
 void carrega_tela(jogo_t * jogo)
 {
+#ifndef DEBUG
     // Limpa o console
     printf("\e[1;1H\e[2J"); // Linux only
 
     printf("%s\n", ascii_pacman_logo);
     printf("%s\n", ascii_pacman_art);
+#endif
     
     imprime_mapa(jogo->mapa);
 }

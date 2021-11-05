@@ -4,8 +4,6 @@
 #include "mapa.h"
 #include "personagem.h"
 
-#define NUMERO_MAX_FANTASMA 3
-
 struct jogo_s
 {
     mapa_t * mapa;

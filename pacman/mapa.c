@@ -9,7 +9,7 @@ void carrega_mapa(mapa_t * mapa)
     char linha[201];
     char caracter;
 
-    file = fopen("pacman/mapas/mapa1.txt", "r");
+    file = fopen("pacman/mapas/mapa2.txt", "r");
 
     // Caso não consiga abrir o arquivo
     if(file == 0)
@@ -58,7 +58,6 @@ void carrega_mapa(mapa_t * mapa)
 
 void imprime_mapa(mapa_t * mapa)
 {
-    // Imprime o mapa
     for(int i = 0;i < mapa->linhas;i++)
     {
         printf("%s\n", mapa->matriz[i]);
