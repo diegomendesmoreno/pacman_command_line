@@ -3,13 +3,15 @@
 #include <string.h>
 #include "mapa.h"
 
+// #define DEBUG
+
 void carrega_mapa(mapa_t * mapa)
 {
     FILE * file;
     char linha[201];
     char caracter;
 
-    file = fopen("pacman/mapas/mapa2.txt", "r");
+    file = fopen("pacman/mapas/mapa3.txt", "r");
 
     // Caso não consiga abrir o arquivo
     if(file == 0)
@@ -24,13 +26,13 @@ void carrega_mapa(mapa_t * mapa)
 
     // Descoberta do número de linhas da matriz
     fseek(file, 0, SEEK_SET);  // Apontando para o início do arquivo
-    caracter = getc(file);
+    caracter = fgetc(file);
     if(caracter != EOF)
     {
         mapa->linhas++;
         while(caracter != EOF)
         {
-            caracter = getc(file);
+            caracter = fgetc(file);
             if(caracter == '\n')
             {
                 mapa->linhas++;
@@ -43,6 +45,10 @@ void carrega_mapa(mapa_t * mapa)
         exit(1);
     }
 
+#ifdef DEBUG
+    printf("Mapa [%d][%d]\n", mapa->linhas, mapa->colunas);
+#endif
+
     // Alocação da matriz do mapa
     aloca_mapa_matriz(mapa);
 
@@ -50,7 +56,15 @@ void carrega_mapa(mapa_t * mapa)
     fseek(file, 0, SEEK_SET);  // Apontando para o início do arquivo
     for(int i = 0; i < mapa->linhas; i++)
     {
-        fscanf(file, "%s", mapa->matriz[i]);
+        for(int j = 0; j < (mapa->colunas + 1); j++)
+        {
+            caracter = fgetc(file);
+
+            if(caracter != '\n' && caracter != EOF)
+            {
+                mapa->matriz[i][j] = caracter;
+            }
+        }
     }
 
     fclose(file);

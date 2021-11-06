@@ -13,9 +13,9 @@ enum elementos_mapa_e
 {
     HEROI    = '@',
     FANTASMA = 'F',
-    PAREDE   = '|',
-    CHAO     = '-',
-    VAZIO    = '.'
+    PAREDE   = '#',
+    CHAO     = '#',
+    VAZIO    = ' '
 };
 
 struct mapa_s
