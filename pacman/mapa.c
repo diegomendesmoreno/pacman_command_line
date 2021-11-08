@@ -3,8 +3,6 @@
 #include <string.h>
 #include "mapa.h"
 
-// #define DEBUG
-
 void carrega_mapa(mapa_t * mapa)
 {
     FILE * file;
@@ -45,12 +43,8 @@ void carrega_mapa(mapa_t * mapa)
         exit(1);
     }
 
-#ifdef DEBUG
-    printf("Mapa [%d][%d]\n", mapa->linhas, mapa->colunas);
-#endif
-
     // Alocação da matriz do mapa
-    aloca_mapa_matriz(mapa);
+    aloca_mapa(mapa);
 
     // Escaniando todas as linhas do arquivo
     fseek(file, 0, SEEK_SET);  // Apontando para o início do arquivo
@@ -78,20 +72,20 @@ void imprime_mapa(mapa_t * mapa)
     }
 }
 
-void aloca_mapa_matriz(mapa_t * mapa)
+void aloca_mapa(mapa_t * mapa)
 {
     // Alocação de memória dinâmica
     mapa->matriz = (char**)malloc(sizeof(char*) * mapa->linhas);
-    for(int i = 0;i < mapa->linhas;i++)
+    for(int i = 0; i < mapa->linhas; i++)
     {
         mapa->matriz[i] = (char*)malloc(sizeof(char) * (mapa->colunas + 1));
     }
 }
 
-void libera_mapa_matriz(mapa_t * mapa)
+void libera_mapa(mapa_t * mapa)
 {
     // Free alocação dinâmica
-    for(int i = 0;i < mapa->linhas;i++)
+    for(int i = 0; i < mapa->linhas; i++)
     {
         free(mapa->matriz[i]);
     }

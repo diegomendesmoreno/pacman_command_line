@@ -14,8 +14,10 @@ struct jogo_s
 typedef struct jogo_s jogo_t;
 
 // Protótipo de funções
+void pacman(jogo_t * jogo);
 void inicia_jogo(jogo_t * jogo);
 void carrega_tela(jogo_t * jogo);
-int  acabou_jogo(void);
+int  acabou_jogo(jogo_t * jogo);
+void termina_jogo(jogo_t * jogo);
 
 #endif  // PACMAN_H

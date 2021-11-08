@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include "pacman.h"
 
-// #define DEBUG
+// #define DEBUG_MODE
 
 const char * ascii_pacman_logo = "\n\
  _ __   __ _  ___ _ __ ___   __ _ _ __  \n\
@@ -21,6 +21,32 @@ const char * ascii_pacman_art = "\n\
 ─▒─▒─▒─▒───▀████▀─────\n\
 \n";  // https://hopemoji.com/text-art-ascii/pacman/
 
+
+void pacman(jogo_t * jogo)
+{
+    inicia_jogo(jogo);
+
+    while(!acabou_jogo(jogo))
+    {
+        carrega_tela(jogo);
+        
+        char comando;
+        scanf(" %c", &comando);
+
+        // Move Herói
+        move_personagem(jogo->mapa, jogo->personagem[0], comando);
+
+        // Move Fantasmas
+        for(int i = 1; i <= jogo->numero_fantasmas; i++)
+        {
+            // Fazer inteligência artificial dos fantasmas
+            move_personagem(jogo->mapa, jogo->personagem[i], ALEATORIO);
+        }
+    }
+
+    termina_jogo(jogo);
+}
+
 void inicia_jogo(jogo_t * jogo)
 {
     // Inicialização do Mapa
@@ -33,10 +59,20 @@ void inicia_jogo(jogo_t * jogo)
 
 void carrega_tela(jogo_t * jogo)
 {
-#ifndef DEBUG
     // Limpa o console
     printf("\e[1;1H\e[2J"); // Linux only
-
+    
+#ifdef DEBUG_MODE
+    printf("\n\nDEBUG MODE\n\n");
+    printf("Mapa [%d][%d]\n", jogo->mapa->linhas, jogo->mapa->colunas);
+    printf("Herói [%d][%d]\n", jogo->personagem[0]->x, jogo->personagem[0]->y);
+    for(int i = 1; i <= jogo->numero_fantasmas; i++)
+    {
+        printf("Fantasma %d [%d][%d]\n", i,
+                jogo->personagem[i]->x, jogo->personagem[i]->y);
+    }
+    printf("\n");
+#else
     printf("%s\n", ascii_pacman_logo);
     printf("%s\n", ascii_pacman_art);
 #endif
@@ -44,7 +80,32 @@ void carrega_tela(jogo_t * jogo)
     imprime_mapa(jogo->mapa);
 }
 
-int acabou_jogo(void)
+int acabou_jogo(jogo_t * jogo)
 {
-    return 0;
+    int acabou = 0;
+
+    for(int i = 1; i <= jogo->numero_fantasmas; i++)
+    {
+        if(jogo->personagem[0]->x == jogo->personagem[i]->x && 
+           jogo->personagem[0]->y == jogo->personagem[i]->y)
+        {
+            acabou = 1;
+            break;
+        }
+    }
+
+    return acabou;
+}
+
+void termina_jogo(jogo_t * jogo)
+{
+    // Carrega a tela final
+    carrega_tela(jogo);
+    printf("\nBooooo acabou\n");
+
+    // Liberação de memória
+    libera_mapa(jogo->mapa);
+    free(jogo->mapa);
+    libera_personagens(jogo->personagem, (jogo->numero_fantasmas + 1));
+    // free(jogo);
 }

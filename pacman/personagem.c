@@ -1,8 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
 #include "personagem.h"
-
-// #define DEBUG
 
 int carrega_personagens(mapa_t * mapa, personagem_t ** personagem)
 {
@@ -13,10 +12,6 @@ int carrega_personagens(mapa_t * mapa, personagem_t ** personagem)
     // Inicialização do Herói
     personagem[0] = (personagem_t*)malloc(sizeof(personagem_t));
     encontra_personagem(mapa, personagem[0], HEROI, x_inicio, y_inicio);
-
-#ifdef DEBUG
-    printf("Herói [%d][%d]\n", personagem[0]->x, personagem[0]->y);
-#endif
 
     // Inicialização dos Fantasmas
     for(int i = 1; i <= NUMERO_MAX_FANTASMA; i++)
@@ -29,18 +24,11 @@ int carrega_personagens(mapa_t * mapa, personagem_t ** personagem)
         }
         else
         {
-#ifdef DEBUG
-            printf("Fantasma %d [%d][%d]\n", i, personagem[i]->x, personagem[i]->y);
-#endif
             x_inicio = personagem[i]->x;
             y_inicio = personagem[i]->y;
             numero_fantasmas++;
         }
     }
-
-#ifdef DEBUG
-    printf("Há %d fantasmas\n", numero_fantasmas);
-#endif
 
     return numero_fantasmas;
 }
@@ -74,6 +62,34 @@ int encontra_personagem(mapa_t * mapa, personagem_t * personagem, char tipo_pers
 // Movimenta o personagem segundo o comando
 void move_personagem(mapa_t * mapa, personagem_t * personagem, char comando)
 {
+    if(comando == ALEATORIO)
+    {
+        const int numero_tentativas = 10;
+
+        comando = sorteia_comando();
+
+        for(int i = 0; i < numero_tentativas; i++)
+        {
+            if(tenta_movimentar(mapa, personagem, comando))
+            {
+                break;
+            }
+            else
+            {
+                comando = sorteia_comando();
+            }
+        }
+    }
+    else
+    {
+        tenta_movimentar(mapa, personagem, comando);
+    }
+}
+
+int tenta_movimentar(mapa_t * mapa, personagem_t * personagem, char comando)
+{
+    int movimento_feito = 0;
+
     switch(comando)
     {
         case CIMA:
@@ -81,10 +97,15 @@ void move_personagem(mapa_t * mapa, personagem_t * personagem, char comando)
             if(mapa->matriz[personagem->x - 1][personagem->y] != PAREDE &&
                mapa->matriz[personagem->x - 1][personagem->y] != CHAO)
             {
-                mapa->matriz[personagem->x][personagem->y] = VAZIO;
+                if(mapa->matriz[personagem->x][personagem->y] == personagem->tipo)
+                {
+                    mapa->matriz[personagem->x][personagem->y] = VAZIO;
+                }
 
                 personagem->x--;
                 mapa->matriz[personagem->x][personagem->y] = personagem->tipo;
+
+                movimento_feito = 1;
             }
         }
         break;
@@ -94,10 +115,15 @@ void move_personagem(mapa_t * mapa, personagem_t * personagem, char comando)
             if(mapa->matriz[personagem->x + 1][personagem->y] != PAREDE &&
                mapa->matriz[personagem->x + 1][personagem->y] != CHAO)
             {
-                mapa->matriz[personagem->x][personagem->y] = VAZIO;
+                if(mapa->matriz[personagem->x][personagem->y] == personagem->tipo)
+                {
+                    mapa->matriz[personagem->x][personagem->y] = VAZIO;
+                }
 
                 personagem->x++;
                 mapa->matriz[personagem->x][personagem->y] = personagem->tipo;
+
+                movimento_feito = 1;
             }
         }
         break;
@@ -107,10 +133,15 @@ void move_personagem(mapa_t * mapa, personagem_t * personagem, char comando)
             if(mapa->matriz[personagem->x][personagem->y - 1] != PAREDE &&
                mapa->matriz[personagem->x][personagem->y - 1] != CHAO)
             {
-                mapa->matriz[personagem->x][personagem->y] = VAZIO;
+                if(mapa->matriz[personagem->x][personagem->y] == personagem->tipo)
+                {
+                    mapa->matriz[personagem->x][personagem->y] = VAZIO;
+                }
                 
                 personagem->y--;
                 mapa->matriz[personagem->x][personagem->y] = personagem->tipo;
+
+                movimento_feito = 1;
             }
         }
         break;
@@ -120,10 +151,15 @@ void move_personagem(mapa_t * mapa, personagem_t * personagem, char comando)
             if(mapa->matriz[personagem->x][personagem->y + 1] != PAREDE &&
                mapa->matriz[personagem->x][personagem->y + 1] != CHAO)
             {
-                mapa->matriz[personagem->x][personagem->y] = VAZIO;
+                if(mapa->matriz[personagem->x][personagem->y] == personagem->tipo)
+                {
+                    mapa->matriz[personagem->x][personagem->y] = VAZIO;
+                }
 
                 personagem->y++;
                 mapa->matriz[personagem->x][personagem->y] = personagem->tipo;
+
+                movimento_feito = 1;
             }
         }
         break;
@@ -133,5 +169,30 @@ void move_personagem(mapa_t * mapa, personagem_t * personagem, char comando)
             ;
         }
         break;
+    }
+
+    return movimento_feito;
+}
+
+char sorteia_comando(void)
+{
+    char comandos[4] = {CIMA, ESQUERDA, BAIXO, DIREITA};
+    int sorteio = 3;
+    time_t t;
+
+    srand((unsigned) time(&t));
+
+    // Faz sorteio do index
+    sorteio = rand() % 4;
+
+    return comandos[sorteio];
+}
+
+void libera_personagens(personagem_t ** personagem, int quantidade_personagens)
+{
+    // Free alocação dinâmica
+    for(int i = 0; i < quantidade_personagens; i++)
+    {
+        free(personagem[i]);
     }
 }

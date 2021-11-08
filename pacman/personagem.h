@@ -18,5 +18,8 @@ typedef struct personagem_s personagem_t;
 int carrega_personagens(mapa_t * mapa, personagem_t ** personagem);
 int encontra_personagem(mapa_t * mapa, personagem_t * personagem, char tipo_personagem, int x_inicio, int y_inicio);
 void move_personagem(mapa_t * mapa, personagem_t * personagem, char comando);
+int tenta_movimentar(mapa_t * mapa, personagem_t * personagem, char comando);
+char sorteia_comando(void);
+void libera_personagens(personagem_t ** personagem, int quantidade_personagens);
 
 #endif  // PERSONAGEM_H
