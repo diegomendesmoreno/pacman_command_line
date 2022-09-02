@@ -36,8 +36,9 @@ jogo_t * inicia_jogo(void)
     jogo_t * jogo_ptr = (jogo_t*)malloc(sizeof(jogo_t));
 
     // Inicialização do Mapa
-    jogo_ptr->mapa = (mapa_t*)malloc(sizeof(mapa_t));
-    carrega_mapa(jogo_ptr->mapa);
+    // jogo_ptr->mapa = (mapa_t*)malloc(sizeof(mapa_t));
+    // carrega_mapa(jogo_ptr->mapa);
+    jogo_ptr->mapa = map_load("pacman/mapas/mapa2.txt");
 
     // Inicialização de personagens
     jogo_ptr->numero_fantasmas = carrega_personagens(jogo_ptr->mapa, jogo_ptr->personagem);

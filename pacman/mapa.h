@@ -29,10 +29,15 @@ struct mapa_s
 
 typedef struct mapa_s mapa_t;
 
+// Function prototype
+mapa_t * map_load(const char * map_file);
+void     map_end(mapa_t * mapa);
+void     map_print(mapa_t * mapa);
+
 // Protótipo de funções
 void carrega_mapa(mapa_t * mapa);
-void imprime_mapa(mapa_t * mapa);
 void aloca_mapa(mapa_t * mapa);
+void imprime_mapa(mapa_t * mapa);
 void libera_mapa(mapa_t * mapa);
 
 #endif  // MAPA_H

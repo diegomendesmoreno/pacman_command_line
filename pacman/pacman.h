@@ -4,13 +4,6 @@
 #include "mapa.h"
 #include "personagem.h"
 
-// struct jogo_s
-// {
-//     mapa_t * mapa;
-//     personagem_t * personagem[1 + NUMERO_MAX_FANTASMA];
-//     int numero_fantasmas;
-// };
-
 // Declaration of opaque type
 typedef struct jogo_s jogo_t;
 
