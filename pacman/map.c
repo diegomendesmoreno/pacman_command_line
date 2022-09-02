@@ -1,7 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "mapa.h"
+#include "map.h"
+
 
 // Declaration of map structure
 struct map_s
@@ -11,12 +12,14 @@ struct map_s
     int columns;
 };
 
+
 // Static function prototypes
 static FILE *  _load_map_file(const char * path);
 static char ** _matrix_allocation(int lines, int columns);
 
 
 // Function implementation
+
 map_t * map_load(const char * map_file)
 {
     map_t * map_ptr = (map_t*)malloc(sizeof(map_t));
@@ -94,13 +97,13 @@ void map_print(map_t * map)
 }
 
 
-int map_get_line(map_t * map)
+int map_get_lines(map_t * map)
 {
     return map->lines;
 }
 
 
-int map_get_column(map_t * map)
+int map_get_columns(map_t * map)
 {
     return map->columns;
 }
@@ -109,6 +112,12 @@ int map_get_column(map_t * map)
 char map_get_position(map_t * map, int x, int y)
 {
     return map->matrix[x][y];
+}
+
+
+void map_set_character(map_t * map, int x, int y, int character)
+{
+    map->matrix[x][y] = character;
 }
 
 
@@ -148,97 +157,4 @@ static char ** _matrix_allocation(int lines, int columns)
     }
 
     return matrix;
-}
-
-
-
-// DELETE
-
-void carrega_mapa(mapa_t * mapa)
-{
-    FILE * file;
-    char linha[201];
-    char caracter;
-
-    file = fopen("pacman/mapas/mapa2.txt", "r");
-
-    // Caso não consiga abrir o arquivo
-    if(file == 0)
-    {
-        printf("Arquivo de mapa não disponível\n\n");
-        exit(1);
-    }
-
-    // Descoberta do número de colunas da matriz
-    fscanf(file, "%s", linha);
-    mapa->colunas = strlen(linha);
-
-    // Descoberta do número de linhas da matriz
-    fseek(file, 0, SEEK_SET);  // Apontando para o início do arquivo
-    caracter = fgetc(file);
-    if(caracter != EOF)
-    {
-        mapa->linhas++;
-        while(caracter != EOF)
-        {
-            caracter = fgetc(file);
-            if(caracter == '\n')
-            {
-                mapa->linhas++;
-            }
-        }
-    }
-    else
-    {
-        printf("Arquivo de mapa vazio\n");
-        exit(1);
-    }
-
-    // Alocação da matriz do mapa
-    aloca_mapa(mapa);
-
-    // Escaniando todas as linhas do arquivo
-    fseek(file, 0, SEEK_SET);  // Apontando para o início do arquivo
-    for(int i = 0; i < mapa->linhas; i++)
-    {
-        for(int j = 0; j < (mapa->colunas + 1); j++)
-        {
-            caracter = fgetc(file);
-
-            if(caracter != '\n' && caracter != EOF)
-            {
-                mapa->matriz[i][j] = caracter;
-            }
-        }
-    }
-
-    fclose(file);
-}
-
-void aloca_mapa(mapa_t * mapa)
-{
-    // Alocação de memória dinâmica
-    mapa->matriz = (char**)malloc(sizeof(char*) * mapa->linhas);
-    for(int i = 0; i < mapa->linhas; i++)
-    {
-        mapa->matriz[i] = (char*)malloc(sizeof(char) * (mapa->colunas + 1));
-    }
-}
-
-void imprime_mapa(mapa_t * mapa)
-{
-    for(int i = 0;i < mapa->linhas;i++)
-    {
-        printf("%s\n", mapa->matriz[i]);
-    }
-}
-
-void libera_mapa(mapa_t * mapa)
-{
-    // Free alocação dinâmica
-    for(int i = 0; i < mapa->linhas; i++)
-    {
-        free(mapa->matriz[i]);
-    }
-    free(mapa->matriz);
 }

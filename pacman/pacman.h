@@ -1,7 +1,7 @@
 #ifndef PACMAN_H
 #define PACMAN_H
 
-#include "mapa.h"
+#include "map.h"
 #include "personagem.h"
 
 // Declaration of opaque type
