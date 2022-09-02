@@ -1,16 +1,19 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "pacman.h"
+#include "map.h"
+#include "personagem.h"
 
 // #define DEBUG_MODE
 
 // Declaration of game structure
-struct jogo_s
+struct game_s
 {
     map_t * map;
-    personagem_t * personagem[1 + NUMERO_MAX_FANTASMA];
-    int numero_fantasmas;
+    personagem_t * personagem[1 + GHOST_MAX_NUMBER];
+    int ghost_quantity;
 };
+
 
 const char * ascii_pacman_logo = "\n\
  _ __   __ _  ___ _ __ ___   __ _ _ __  \n\
@@ -30,58 +33,91 @@ const char * ascii_pacman_art = "\n\
 \n";  // https://hopemoji.com/text-art-ascii/pacman/
 
 
-jogo_t * pacman_load(void)
+// Static function prototypes
+static void carrega_tela(game_t * game);
+static int  acabou_game(game_t * game);
+static void termina_game(game_t * game);
+
+
+game_t * pacman_load(const int map_number)
 {
     // Game initialization
-    jogo_t * jogo_ptr = (jogo_t*)malloc(sizeof(jogo_t));
+    game_t * game_ptr = (game_t*)malloc(sizeof(game_t));
 
     // Map inialization
-    jogo_ptr->map = map_load("pacman/maps/map_2.txt");
+    switch(map_number)
+    {
+        case 1:
+        {
+            game_ptr->map = map_load("pacman/maps/map_1.txt");
+        }
+        break;
+
+        case 2:
+        {
+            game_ptr->map = map_load("pacman/maps/map_2.txt");
+        }
+        break;
+
+        case 3:
+        {
+            game_ptr->map = map_load("pacman/maps/map_3.txt");
+        }
+        break;
+
+        default:
+        {
+            printf("Invalid map number\n");
+            free(game_ptr);
+            exit(1);
+        }
+        break;
+    }
 
     // Characters inicialization
-    jogo_ptr->numero_fantasmas = carrega_personagens(jogo_ptr->map, jogo_ptr->personagem);
+    game_ptr->ghost_quantity = carrega_personagens(game_ptr->map, game_ptr->personagem);
 
-    return jogo_ptr;
+    return game_ptr;
 }
 
 
-void pacman(jogo_t * jogo)
+void pacman_play(game_t * game)
 {
-    while(!acabou_jogo(jogo))
+    while(!acabou_game(game))
     {
-        carrega_tela(jogo);
+        carrega_tela(game);
         
         char comando;
         scanf(" %c", &comando);
 
         // Move Herói
-        move_personagem(jogo->map, jogo->personagem[0], comando);
+        move_personagem(game->map, game->personagem[0], comando);
 
         // Move Fantasmas
-        for(int i = 1; i <= jogo->numero_fantasmas; i++)
+        for(int i = 1; i <= game->ghost_quantity; i++)
         {
             // Fazer inteligência artificial dos fantasmas
-            move_personagem(jogo->map, jogo->personagem[i], ALEATORIO);
+            move_personagem(game->map, game->personagem[i], ALEATORIO);
         }
     }
 
-    termina_jogo(jogo);
+    termina_game(game);
 }
 
 
-void carrega_tela(jogo_t * jogo)
+static void carrega_tela(game_t * game)
 {
     // Cleans console
     printf("\e[1;1H\e[2J"); // Linux only
     
 #ifdef DEBUG_MODE
     printf("\n\nDEBUG MODE\n\n");
-    printf("Map     [%d][%d]\n", map_get_lines(jogo->map), map_get_columns(jogo->map));
-    printf("Hero    [%d][%d]\n", jogo->personagem[0]->x, jogo->personagem[0]->y);
-    for(int i = 1; i <= jogo->numero_fantasmas; i++)
+    printf("Map     [%d][%d]\n", map_get_lines(game->map), map_get_columns(game->map));
+    printf("Hero    [%d][%d]\n", game->personagem[0]->x, game->personagem[0]->y);
+    for(int i = 1; i <= game->ghost_quantity; i++)
     {
         printf("Ghost %d [%d][%d]\n", i,
-                jogo->personagem[i]->x, jogo->personagem[i]->y);
+                game->personagem[i]->x, game->personagem[i]->y);
     }
     printf("\n");
 #else
@@ -89,18 +125,18 @@ void carrega_tela(jogo_t * jogo)
     printf("%s\n", ascii_pacman_art);
 #endif
     
-    map_print(jogo->map);
+    map_print(game->map);
 }
 
 
-int acabou_jogo(jogo_t * jogo)
+static int acabou_game(game_t * game)
 {
     int acabou = 0;
 
-    for(int i = 1; i <= jogo->numero_fantasmas; i++)
+    for(int i = 1; i <= game->ghost_quantity; i++)
     {
-        if(jogo->personagem[0]->x == jogo->personagem[i]->x && 
-           jogo->personagem[0]->y == jogo->personagem[i]->y)
+        if(game->personagem[0]->x == game->personagem[i]->x && 
+           game->personagem[0]->y == game->personagem[i]->y)
         {
             acabou = 1;
             break;
@@ -111,14 +147,14 @@ int acabou_jogo(jogo_t * jogo)
 }
 
 
-void termina_jogo(jogo_t * jogo)
+static void termina_game(game_t * game)
 {
     // Carrega a tela final
-    carrega_tela(jogo);
+    carrega_tela(game);
     printf("\nBooooo it's over\n");
 
     // Freeing memory
-    libera_personagens(jogo->personagem, (jogo->numero_fantasmas + 1));
-    map_end(jogo->map);
-    free(jogo);
+    libera_personagens(game->personagem, (game->ghost_quantity + 1));
+    map_end(game->map);
+    free(game);
 }

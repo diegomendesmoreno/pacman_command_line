@@ -14,7 +14,7 @@ int carrega_personagens(map_t *map, personagem_t **personagem)
 	encontra_personagem(map, personagem[0], HEROI, x_inicio, y_inicio);
 
 	// Inicialização dos Fantasmas
-	for(int i = 1; i <= NUMERO_MAX_FANTASMA; i++)
+	for(int i = 1; i <= GHOST_MAX_NUMBER; i++)
     {
 		personagem[i] = (personagem_t *)malloc(sizeof(personagem_t));
 		if(encontra_personagem(map, personagem[i], FANTASMA, x_inicio, y_inicio))

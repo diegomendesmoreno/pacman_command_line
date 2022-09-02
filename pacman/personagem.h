@@ -3,7 +3,7 @@
 
 #include "map.h"
 
-#define NUMERO_MAX_FANTASMA 4
+#define GHOST_MAX_NUMBER 4
 
 // Declaration of personagem structure
 struct personagem_s
