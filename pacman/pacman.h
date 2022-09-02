@@ -8,7 +8,7 @@
 typedef struct jogo_s jogo_t;
 
 // Protótipo de funções
-jogo_t * inicia_jogo(void);
+jogo_t * pacman_load(void);
 void     pacman(jogo_t * jogo);
 void     carrega_tela(jogo_t * jogo);
 int      acabou_jogo(jogo_t * jogo);

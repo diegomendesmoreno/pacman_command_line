@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include "pacman.h"
 
-// #define DEBUG_MODE
+#define DEBUG_MODE
 
 // Declaration of game structure
 struct jogo_s
@@ -30,17 +30,15 @@ const char * ascii_pacman_art = "\n\
 \n";  // https://hopemoji.com/text-art-ascii/pacman/
 
 
-jogo_t * inicia_jogo(void)
+jogo_t * pacman_load(void)
 {
-    // Inicialização do Jogo
+    // Game initialization
     jogo_t * jogo_ptr = (jogo_t*)malloc(sizeof(jogo_t));
 
-    // Inicialização do Mapa
-    // jogo_ptr->mapa = (mapa_t*)malloc(sizeof(mapa_t));
-    // carrega_mapa(jogo_ptr->mapa);
-    jogo_ptr->mapa = map_load("pacman/mapas/mapa2.txt");
+    // Map inialization
+    jogo_ptr->mapa = (mapa_t*)map_load("pacman/mapas/map_2.txt");
 
-    // Inicialização de personagens
+    // Characters inicialization
     jogo_ptr->numero_fantasmas = carrega_personagens(jogo_ptr->mapa, jogo_ptr->personagem);
 
     return jogo_ptr;
@@ -73,16 +71,16 @@ void pacman(jogo_t * jogo)
 
 void carrega_tela(jogo_t * jogo)
 {
-    // Limpa o console
+    // Cleans console
     printf("\e[1;1H\e[2J"); // Linux only
     
 #ifdef DEBUG_MODE
     printf("\n\nDEBUG MODE\n\n");
-    printf("Mapa [%d][%d]\n", jogo->mapa->linhas, jogo->mapa->colunas);
-    printf("Herói [%d][%d]\n", jogo->personagem[0]->x, jogo->personagem[0]->y);
+    printf("Map     [%d][%d]\n", map_get_line((map_t*)jogo->mapa), map_get_column((map_t*)jogo->mapa));
+    printf("Hero    [%d][%d]\n", jogo->personagem[0]->x, jogo->personagem[0]->y);
     for(int i = 1; i <= jogo->numero_fantasmas; i++)
     {
-        printf("Fantasma %d [%d][%d]\n", i,
+        printf("Ghost %d [%d][%d]\n", i,
                 jogo->personagem[i]->x, jogo->personagem[i]->y);
     }
     printf("\n");
@@ -91,7 +89,7 @@ void carrega_tela(jogo_t * jogo)
     printf("%s\n", ascii_pacman_art);
 #endif
     
-    imprime_mapa(jogo->mapa);
+    map_print((map_t*)jogo->mapa);
 }
 
 
@@ -117,11 +115,10 @@ void termina_jogo(jogo_t * jogo)
 {
     // Carrega a tela final
     carrega_tela(jogo);
-    printf("\nBooooo acabou\n");
+    printf("\nBooooo it's over\n");
 
-    // Liberação de memória
-    libera_mapa(jogo->mapa);
-    free(jogo->mapa);
+    // Freeing memory
     libera_personagens(jogo->personagem, (jogo->numero_fantasmas + 1));
+    map_end((map_t*)jogo->mapa);
     free(jogo);
 }

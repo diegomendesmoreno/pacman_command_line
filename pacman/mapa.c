@@ -3,6 +3,13 @@
 #include <string.h>
 #include "mapa.h"
 
+// Declaration of map structure
+struct map_s
+{
+    char ** matrix;
+    int lines;
+    int columns;
+};
 
 // Static function prototypes
 static FILE *  _load_map_file(const char * path);
@@ -10,9 +17,9 @@ static char ** _matrix_allocation(int lines, int columns);
 
 
 // Function implementation
-mapa_t * map_load(const char * map_file)
+map_t * map_load(const char * map_file)
 {
-    mapa_t * mapa_ptr = (mapa_t*)malloc(sizeof(mapa_t));
+    map_t * map_ptr = (map_t*)malloc(sizeof(map_t));
     
     // Load map file
     FILE * file = _load_map_file(map_file);
@@ -24,7 +31,7 @@ mapa_t * map_load(const char * map_file)
 
     fscanf(file, "%s", line);
     columns = strlen(line);
-    mapa_ptr->colunas = columns;
+    map_ptr->columns = columns;
 
     
     // Get number of lines of the matrix
@@ -50,51 +57,69 @@ mapa_t * map_load(const char * map_file)
         printf("Map file is empty\n");
         exit(1);
     }
-    mapa_ptr->linhas = lines;
+    map_ptr->lines = lines;
 
     
     // Allocate memory for the matrix
-    mapa_ptr->matriz = _matrix_allocation(lines, columns);
+    map_ptr->matrix = _matrix_allocation(lines, columns);
 
 
     // Populate the matrix
     fseek(file, 0, SEEK_SET);  // point to the beginning of the file
-    for(int i = 0; i < mapa_ptr->linhas; i++)
+    for(int i = 0; i < map_ptr->lines; i++)
     {
-        for(int j = 0; j < (mapa_ptr->colunas + 1); j++)
+        for(int j = 0; j < (map_ptr->columns + 1); j++)
         {
             character = fgetc(file);
 
             if(character != '\n' && character != EOF)
             {
-                mapa_ptr->matriz[i][j] = character;
+                map_ptr->matrix[i][j] = character;
             }
         }
     }
 
     fclose(file);
 
-    return mapa_ptr;
+    return map_ptr;
 }
 
 
-void map_print(mapa_t * mapa)
+void map_print(map_t * map)
 {
-    for(int i = 0;i < mapa->linhas;i++)
+    for(int i = 0;i < map->lines;i++)
     {
-        printf("%s\n", mapa->matriz[i]);
+        printf("%s\n", map->matrix[i]);
     }
 }
 
 
-void map_end(mapa_t * mapa)
+int map_get_line(map_t * map)
 {
-    for(int i = 0; i < mapa->linhas; i++)
+    return map->lines;
+}
+
+
+int map_get_column(map_t * map)
+{
+    return map->columns;
+}
+
+
+char map_get_position(map_t * map, int x, int y)
+{
+    return map->matrix[x][y];
+}
+
+
+void map_end(map_t * map)
+{
+    for(int i = 0; i < map->lines; i++)
     {
-        free(mapa->matriz[i]);
+        free(map->matrix[i]);
     }
-    free(mapa->matriz);
-    free(mapa);
+    free(map->matrix);
+    free(map);
 }
 
 

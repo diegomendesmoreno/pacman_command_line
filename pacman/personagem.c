@@ -37,9 +37,9 @@ int carrega_personagens(mapa_t * mapa, personagem_t ** personagem)
 // Encontra o personagem no mapa
 int encontra_personagem(mapa_t * mapa, personagem_t * personagem, char tipo_personagem, int x_inicio, int y_inicio)
 {
-    for(int i = x_inicio; i < mapa->linhas; i++)
+    for(int i = x_inicio; i < map_get_line((map_t*)mapa); i++)
     {
-        for(int j = 0; j < mapa->colunas; j++)
+        for(int j = 0; j < map_get_column((map_t*)mapa); j++)
         {
             // Começando após a última busca
             if(i == x_inicio && j <= y_inicio)
