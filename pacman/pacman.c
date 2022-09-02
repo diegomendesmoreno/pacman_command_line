@@ -4,6 +4,14 @@
 
 // #define DEBUG_MODE
 
+// Declaration of game structure
+struct jogo_s
+{
+    mapa_t * mapa;
+    personagem_t * personagem[1 + NUMERO_MAX_FANTASMA];
+    int numero_fantasmas;
+};
+
 const char * ascii_pacman_logo = "\n\
  _ __   __ _  ___ _ __ ___   __ _ _ __  \n\
 | '_ \\ / _` |/ __| '_ ` _ \\ / _` | '_ \\ \n\
@@ -22,10 +30,24 @@ const char * ascii_pacman_art = "\n\
 \n";  // https://hopemoji.com/text-art-ascii/pacman/
 
 
+jogo_t * inicia_jogo(void)
+{
+    // Inicialização do Jogo
+    jogo_t * jogo_ptr = (jogo_t*)malloc(sizeof(jogo_t));
+
+    // Inicialização do Mapa
+    jogo_ptr->mapa = (mapa_t*)malloc(sizeof(mapa_t));
+    carrega_mapa(jogo_ptr->mapa);
+
+    // Inicialização de personagens
+    jogo_ptr->numero_fantasmas = carrega_personagens(jogo_ptr->mapa, jogo_ptr->personagem);
+
+    return jogo_ptr;
+}
+
+
 void pacman(jogo_t * jogo)
 {
-    inicia_jogo(jogo);
-
     while(!acabou_jogo(jogo))
     {
         carrega_tela(jogo);
@@ -47,15 +69,6 @@ void pacman(jogo_t * jogo)
     termina_jogo(jogo);
 }
 
-void inicia_jogo(jogo_t * jogo)
-{
-    // Inicialização do Mapa
-    jogo->mapa = (mapa_t*)malloc(sizeof(mapa_t));
-    carrega_mapa(jogo->mapa);
-
-    // Inicialização de personagens
-    jogo->numero_fantasmas = carrega_personagens(jogo->mapa, jogo->personagem);
-}
 
 void carrega_tela(jogo_t * jogo)
 {
@@ -80,6 +93,7 @@ void carrega_tela(jogo_t * jogo)
     imprime_mapa(jogo->mapa);
 }
 
+
 int acabou_jogo(jogo_t * jogo)
 {
     int acabou = 0;
@@ -97,6 +111,7 @@ int acabou_jogo(jogo_t * jogo)
     return acabou;
 }
 
+
 void termina_jogo(jogo_t * jogo)
 {
     // Carrega a tela final
@@ -107,5 +122,5 @@ void termina_jogo(jogo_t * jogo)
     libera_mapa(jogo->mapa);
     free(jogo->mapa);
     libera_personagens(jogo->personagem, (jogo->numero_fantasmas + 1));
-    // free(jogo);
+    free(jogo);
 }

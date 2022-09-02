@@ -3,6 +3,7 @@
 #include <time.h>
 #include "personagem.h"
 
+
 int carrega_personagens(mapa_t * mapa, personagem_t ** personagem)
 {
     int x_inicio = 0;

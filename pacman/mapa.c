@@ -3,13 +3,14 @@
 #include <string.h>
 #include "mapa.h"
 
+
 void carrega_mapa(mapa_t * mapa)
 {
     FILE * file;
     char linha[201];
     char caracter;
 
-    file = fopen("pacman/mapas/mapa3.txt", "r");
+    file = fopen("pacman/mapas/mapa2.txt", "r");
 
     // Caso não consiga abrir o arquivo
     if(file == 0)

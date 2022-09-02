@@ -5,6 +5,7 @@
 
 #define NUMERO_MAX_FANTASMA 4
 
+// Declaration of personagem structure
 struct personagem_s
 {
     char tipo;

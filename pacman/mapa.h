@@ -19,6 +19,7 @@ enum elementos_mapa_e
     VAZIO    = ' '
 };
 
+// Declaration of map structure
 struct mapa_s
 {
     char ** matriz;

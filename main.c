@@ -9,17 +9,12 @@
 #include <stdio.h>
 #include "pacman/pacman.h"
 
-// Defines de usuário
-
-// Variáveis globais
-static jogo_t jogo;
-
-// Protótipo de funções
-
 
 int main(void)
 {
-    pacman(&jogo);
+    jogo_t * jogo = inicia_jogo();
+
+    pacman(jogo);
     
     return 0;
 }
