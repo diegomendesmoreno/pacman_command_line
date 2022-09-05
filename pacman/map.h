@@ -1,24 +1,6 @@
 #ifndef MAP_H
 #define MAP_H
 
-enum controles_e
-{
-    CIMA      = 'w',
-    ESQUERDA  = 'a',
-    BAIXO     = 's',
-    DIREITA   = 'd',
-    ALEATORIO = 0
-};
-
-enum elementos_map_e
-{
-    HEROI    = '@',
-    FANTASMA = 'F',
-    PAREDE   = '#',
-    CHAO     = '#',
-    VAZIO    = ' '
-};
-
 // Declaration of opaque type
 typedef struct map_s map_t;
 

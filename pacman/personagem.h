@@ -5,6 +5,15 @@
 
 #define GHOST_MAX_NUMBER 4
 
+enum controles_e
+{
+    CIMA      = 'w',
+    ESQUERDA  = 'a',
+    BAIXO     = 's',
+    DIREITA   = 'd',
+    ALEATORIO = 0
+};
+
 // Declaration of personagem structure
 struct personagem_s
 {

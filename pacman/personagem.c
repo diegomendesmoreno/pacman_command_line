@@ -3,6 +3,15 @@
 #include <stdlib.h>
 #include <time.h>
 
+enum elementos_map_e
+{
+    HEROI    = '@',
+    FANTASMA = 'F',
+    PAREDE   = '#',
+    CHAO     = '#',
+    VAZIO    = ' '
+};
+
 int carrega_personagens(map_t *map, personagem_t **personagem)
 {
 	int x_inicio = 0;

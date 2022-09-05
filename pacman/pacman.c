@@ -34,9 +34,9 @@ const char * ascii_pacman_art = "\n\
 
 
 // Static function prototypes
-static void carrega_tela(game_t * game);
-static int  acabou_game(game_t * game);
-static void termina_game(game_t * game);
+static void _load_screen(game_t * game);
+static int  _is_it_over(game_t * game);
+static void _game_over(game_t * game);
 
 
 game_t * pacman_load(const int map_number)
@@ -83,29 +83,28 @@ game_t * pacman_load(const int map_number)
 
 void pacman_play(game_t * game)
 {
-    while(!acabou_game(game))
+    while(!_is_it_over(game))
     {
-        carrega_tela(game);
+        _load_screen(game);
         
-        char comando;
-        scanf(" %c", &comando);
+        char command;
+        scanf(" %c", &command);
 
-        // Move Herói
-        move_personagem(game->map, game->personagem[0], comando);
+        // Hero movement
+        move_personagem(game->map, game->personagem[0], command);
 
-        // Move Fantasmas
+        // Ghost movement
         for(int i = 1; i <= game->ghost_quantity; i++)
         {
-            // Fazer inteligência artificial dos fantasmas
             move_personagem(game->map, game->personagem[i], ALEATORIO);
         }
     }
 
-    termina_game(game);
+    _game_over(game);
 }
 
 
-static void carrega_tela(game_t * game)
+static void _load_screen(game_t * game)
 {
     // Cleans console
     printf("\e[1;1H\e[2J"); // Linux only
@@ -129,28 +128,28 @@ static void carrega_tela(game_t * game)
 }
 
 
-static int acabou_game(game_t * game)
+static int _is_it_over(game_t * game)
 {
-    int acabou = 0;
+    int its_over = 0;
 
     for(int i = 1; i <= game->ghost_quantity; i++)
     {
-        if(game->personagem[0]->x == game->personagem[i]->x && 
+        if(game->personagem[0]->x == game->personagem[i]->x &&
            game->personagem[0]->y == game->personagem[i]->y)
         {
-            acabou = 1;
+            its_over = 1;
             break;
         }
     }
 
-    return acabou;
+    return its_over;
 }
 
 
-static void termina_game(game_t * game)
+static void _game_over(game_t * game)
 {
-    // Carrega a tela final
-    carrega_tela(game);
+    // Load final screen
+    _load_screen(game);
     printf("\nBooooo it's over\n");
 
     // Freeing memory
