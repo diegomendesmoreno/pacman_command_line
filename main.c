@@ -12,7 +12,7 @@
 
 int main(void)
 {
-    game_t * game = pacman_load(2);
+    game_t * game = pacman_load(1);
 
     pacman_play(game);
     

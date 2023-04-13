@@ -1,1 +1,6 @@
+# Replit
+.replit
+replit.nix
+.cache
+*.o
 main
